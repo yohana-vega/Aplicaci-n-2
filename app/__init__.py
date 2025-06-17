@@ -3,6 +3,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 
+
+
+
 #Crea una instancia de SQLAlchemy sin enlazarla aún a la app (esto permite usarla globalmente en models.py).
 db = SQLAlchemy()
 
@@ -19,4 +22,11 @@ def create_app():
     from .routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    from .routes import crear_materias_si_no_existen
+
+    # Crear materias si no existen
+    with app.app_context():
+        db.create_all()
+        crear_materias_si_no_existen()
+        
     return app
